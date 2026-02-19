@@ -1,0 +1,257 @@
+meta {
+    title: "PWG Pedestrian Infrastructure (Tier View)";
+    description: "JOSM MapCSS conversion of PWG tiered pedestrian infrastructure styling.";
+    author: "Converted by Codex";
+    version: "1.0_2026-02-19";
+    min-josm-version: 18800;
+}
+
+/*
+ * Tier colors:
+ * Bronze  = #cd7f32
+ * Silver  = #c0c0c0
+ * Gold    = #d4af37
+ * Diamond = #4fc3f7
+ */
+
+/* ============================================================
+ * GOLD+/DIAMOND+ AREA REPRESENTATIONS
+ * area:highway=footway (ways + relations)
+ * ============================================================ */
+
+way["area:highway"=footway]::pwg_area,
+relation["area:highway"=footway]::pwg_area {
+    fill-color: #d4af37;
+    fill-opacity: 0.2;
+    z-index: 3;
+}
+
+way["area:highway"=footway]["incline:across"][tactile_paving=no]::pwg_area,
+way["area:highway"=footway]["incline:across"]["tactile_paving:colour"]::pwg_area,
+relation["area:highway"=footway]["incline:across"][tactile_paving=no]::pwg_area,
+relation["area:highway"=footway]["incline:across"]["tactile_paving:colour"]::pwg_area {
+    fill-color: #4fc3f7;
+}
+
+/* ============================================================
+ * SIDEWALKS (ways): highway=footway + footway=sidewalk
+ * Bronze -> Silver -> Gold -> Diamond
+ * ============================================================ */
+
+way[highway=footway][footway=sidewalk]::pwg_sidewalk {
+    color: #cd7f32;
+    width: 4;
+    z-index: 20;
+}
+
+way[highway=footway][footway=sidewalk][surface]::pwg_sidewalk {
+    color: #c0c0c0;
+}
+
+way[highway=footway][footway=sidewalk][surface][lit][width][incline][tactile_paving]::pwg_sidewalk {
+    color: #d4af37;
+}
+
+way[highway=footway][footway=sidewalk][surface][lit][width][incline][tactile_paving]["incline:across"][tactile_paving=no]::pwg_sidewalk,
+way[highway=footway][footway=sidewalk][surface][lit][width][incline][tactile_paving]["incline:across"]["tactile_paving:colour"]::pwg_sidewalk {
+    color: #4fc3f7;
+}
+
+/* ============================================================
+ * CROSSINGS (ways): highway=footway + footway=crossing
+ * ============================================================ */
+
+way[highway=footway][footway=crossing]::pwg_crossing {
+    color: #cd7f32;
+    width: 4;
+    dashes: 1.2, 1.2;
+    z-index: 22;
+}
+
+way[highway=footway][footway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface]::pwg_crossing {
+    color: #c0c0c0;
+}
+
+way[highway=footway][footway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]::pwg_crossing {
+    color: #d4af37;
+}
+
+way[highway=footway][footway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(no|shared|dedicated)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]["traffic_signals:minimap"]["crossing:flags"]::pwg_crossing {
+    color: #4fc3f7;
+}
+
+/* ============================================================
+ * ISLANDS (ways): highway=footway + footway=traffic_island
+ * ============================================================ */
+
+way[highway=footway][footway=traffic_island]::pwg_island {
+    color: #cd7f32;
+    width: 4;
+    dashes: 4, 2;
+    z-index: 21;
+}
+
+way[highway=footway][footway=traffic_island][surface]::pwg_island {
+    color: #c0c0c0;
+}
+
+way[highway=footway][footway=traffic_island][surface][lit][width][incline][tactile_paving]::pwg_island {
+    color: #d4af37;
+}
+
+way[highway=footway][footway=traffic_island][surface][lit][width][incline][tactile_paving]["incline:across"][tactile_paving=no]::pwg_island,
+way[highway=footway][footway=traffic_island][surface][lit][width][incline][tactile_paving]["incline:across"]["tactile_paving:colour"]::pwg_island {
+    color: #4fc3f7;
+}
+
+/* ============================================================
+ * ACCESS AISLES (ways): highway=footway + footway=access_aisle
+ * ============================================================ */
+
+way[highway=footway][footway=access_aisle]::pwg_access_aisle {
+    color: #cd7f32;
+    width: 4;
+    dashes: 0.6, 1.3;
+    z-index: 21;
+}
+
+way[highway=footway][footway=access_aisle]["access_aisle:markings"][surface]::pwg_access_aisle {
+    color: #c0c0c0;
+}
+
+way[highway=footway][footway=access_aisle]["access_aisle:markings"][surface][lit][width][incline][tactile_paving]::pwg_access_aisle {
+    color: #d4af37;
+}
+
+way[highway=footway][footway=access_aisle]["access_aisle:markings"][surface][lit][width][incline][tactile_paving]["incline:across"][tactile_paving=no]::pwg_access_aisle,
+way[highway=footway][footway=access_aisle]["access_aisle:markings"][surface][lit][width][incline][tactile_paving]["incline:across"]["tactile_paving:colour"]::pwg_access_aisle {
+    color: #4fc3f7;
+}
+
+/* ============================================================
+ * ROADWAY sidewalk presence overlay (not tiered)
+ * Green = separate, Orange = no, Gray = other/unspecified
+ * ============================================================ */
+
+way[highway][highway!=footway][sidewalk]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:left"]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:right"]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:both"]::pwg_roadway_sidewalk {
+    color: #555555;
+    width: 2.4;
+    dashes: 3, 2;
+    opacity: 0.8;
+    z-index: 12;
+}
+
+way[highway][highway!=footway][sidewalk=no]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:left"=no]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:right"=no]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:both"=no]::pwg_roadway_sidewalk {
+    color: #d95f02;
+}
+
+way[highway][highway!=footway][sidewalk=separate]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:left"=separate]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:right"=separate]::pwg_roadway_sidewalk,
+way[highway][highway!=footway]["sidewalk:both"=separate]::pwg_roadway_sidewalk {
+    color: #2e8b57;
+}
+
+/* ============================================================
+ * CROSSING NODES (highway=crossing)
+ * halo circle + tier letter overlay
+ * ============================================================ */
+
+node[highway=crossing]::pwg_crossing_halo {
+    symbol-shape: circle;
+    symbol-size: 10;
+    symbol-fill-color: #cd7f32;
+    symbol-fill-opacity: 0.75;
+    symbol-stroke-color: #ffffff;
+    symbol-stroke-width: 1.6;
+    z-index: 30;
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface]::pwg_crossing_halo {
+    symbol-fill-color: #c0c0c0;
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]::pwg_crossing_halo {
+    symbol-fill-color: #d4af37;
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(no|shared|dedicated)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]["traffic_signals:minimap"]["crossing:flags"]::pwg_crossing_halo {
+    symbol-fill-color: #4fc3f7;
+}
+
+node[highway=crossing]::pwg_crossing_tier {
+    text: "B";
+    text-color: #111111;
+    font-size: 9;
+    text-halo-color: #ffffff;
+    text-halo-radius: 1;
+    z-index: 31;
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface]::pwg_crossing_tier {
+    text: "S";
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(yes|no)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]::pwg_crossing_tier {
+    text: "G";
+}
+
+node[highway=crossing]["crossing:markings"]["crossing:markings"!=yes]["crossing:markings"!=no]["crossing:signals"=~/^(no|shared|dedicated)$/][surface][width][button_operated]["traffic_signals:arrow"]["traffic_signals:vibration"]["traffic_signals:minimap"]["crossing:flags"]::pwg_crossing_tier {
+    text: "D";
+}
+
+/* ============================================================
+ * CURBS (nodes): barrier=kerb
+ * halo circle + tier letter overlay
+ * ============================================================ */
+
+node[barrier=kerb]::pwg_kerb_halo {
+    symbol-shape: circle;
+    symbol-size: 9;
+    symbol-fill-color: #cd7f32;
+    symbol-fill-opacity: 0.75;
+    symbol-stroke-color: #222222;
+    symbol-stroke-width: 1.4;
+    z-index: 30;
+}
+
+node[barrier=kerb][kerb][tactile_paving]::pwg_kerb_halo {
+    symbol-fill-color: #c0c0c0;
+}
+
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"]::pwg_kerb_halo {
+    symbol-fill-color: #d4af37;
+}
+
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"][tactile_paving=no]::pwg_kerb_halo,
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"]["tactile_paving:colour"]::pwg_kerb_halo {
+    symbol-fill-color: #4fc3f7;
+}
+
+node[barrier=kerb]::pwg_kerb_tier {
+    text: "B";
+    text-color: #111111;
+    font-size: 8;
+    text-halo-color: #ffffff;
+    text-halo-radius: 1;
+    z-index: 31;
+}
+
+node[barrier=kerb][kerb][tactile_paving]::pwg_kerb_tier {
+    text: "S";
+}
+
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"]::pwg_kerb_tier {
+    text: "G";
+}
+
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"][tactile_paving=no]::pwg_kerb_tier,
+node[barrier=kerb][kerb][tactile_paving]["kerb:height"]["tactile_paving:colour"]::pwg_kerb_tier {
+    text: "D";
+}
