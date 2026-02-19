@@ -1,0 +1,548 @@
+---
+title: PWG Pedestrian Infrastructure (Tier View)
+description: Visualize PWG guide features inside {{bbox}}. Color = PWG tier from mapped tags; pattern = feature class.
+popupOnHover: true
+
+style:
+  extends: https://styles.trailsta.sh/openmaptiles-osm.json
+
+  layers:
+    # ============================================================
+    # GOLD+: area representations (area:highway=footway)
+    # Gold = area exists
+    # Diamond = incline:across present AND (tactile_paving=no OR tactile_paving:colour present)
+    # ============================================================
+    - type: fill
+      filter: ["all", ["==", ["geometry-type"], "Polygon"], ["==", ["get", "area:highway"], "footway"]]
+      fill-color:
+        ["case",
+          ["all",
+            ["==", ["get", "area:highway"], "footway"],
+            ["has", "incline:across"],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ]
+          ],
+          "#4fc3f7",
+          "#d4af37"
+        ]
+      fill-opacity: 0.2
+
+    # ============================================================
+    # SIDEWALKS (ways): highway=footway + footway=sidewalk
+    # Bronze: geometry
+    # Silver: + surface
+    # Gold: + lit + width + incline + tactile_paving
+    # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present)
+    # ============================================================
+    - type: line
+      filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "sidewalk"]]
+      line-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "sidewalk"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"],
+            ["has", "incline:across"],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ]
+          ],
+          "#4fc3f7",
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "sidewalk"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"]
+          ],
+          "#d4af37",
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "sidewalk"],
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+          # Bronze
+          "#cd7f32"
+        ]
+      line-width:
+        stops: [[13, 2], [17, 6]]
+
+    # ============================================================
+    # CROSSINGS (ways): highway=footway + footway=crossing
+    #
+    # Bronze markings: must be yes/no
+    # Silver+ markings: must be present AND NOT yes/no (e.g., ladder, zebra, lines, etc.)
+    #
+    # crossing:signals=no is valid at every tier
+    # crossing:signals=yes is NOT valid at Diamond (Diamond requires shared/dedicated OR no)
+    #
+    # Bronze: markings yes/no + signals yes/no
+    # Silver: markings specific (not yes/no) + signals yes/no + surface
+    # Gold: Silver + width + button_operated + traffic_signals:arrow + traffic_signals:vibration
+    # Diamond: Gold + traffic_signals:minimap + crossing:flags + signals (no/shared/dedicated) AND NOT yes
+    # ============================================================
+    - type: line
+      filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "crossing"]]
+      line-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "crossing"],
+
+            # markings: present and NOT yes/no
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            # signals: present AND (no/shared/dedicated) AND NOT yes
+            ["all",
+              ["has", "crossing:signals"],
+              ["!", ["==", ["get", "crossing:signals"], "yes"]],
+              ["any",
+                ["==", ["get", "crossing:signals"], "no"],
+                ["==", ["get", "crossing:signals"], "shared"],
+                ["==", ["get", "crossing:signals"], "dedicated"]
+              ]
+            ],
+
+            ["has", "surface"],
+            ["has", "width"],
+            ["has", "button_operated"],
+            ["has", "traffic_signals:arrow"],
+            ["has", "traffic_signals:vibration"],
+            ["has", "traffic_signals:minimap"],
+            ["has", "crossing:flags"]
+          ],
+          "#4fc3f7",
+
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+
+            ["has", "surface"],
+            ["has", "width"],
+            ["has", "button_operated"],
+            ["has", "traffic_signals:arrow"],
+            ["has", "traffic_signals:vibration"]
+          ],
+          "#d4af37",
+
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+
+          # Bronze
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ]
+          ],
+          "#cd7f32",
+
+          "#cd7f32"
+        ]
+      line-width:
+        stops: [[13, 2], [17, 7]]
+      line-dasharray: [1.2, 1.2]
+
+    # ============================================================
+    # ISLANDS (ways): highway=footway + footway=traffic_island
+    # Bronze: geometry
+    # Silver: + surface
+    # Gold: + lit + width + incline + tactile_paving
+    # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present)
+    # ============================================================
+    - type: line
+      filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "traffic_island"]]
+      line-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "traffic_island"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"],
+            ["has", "incline:across"],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ]
+          ],
+          "#4fc3f7",
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "traffic_island"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"]
+          ],
+          "#d4af37",
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "traffic_island"],
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+          # Bronze
+          "#cd7f32"
+        ]
+      line-width:
+        stops: [[13, 2], [17, 6]]
+      line-dasharray: [4, 2]
+
+    # ============================================================
+    # ACCESS AISLES (ways): highway=footway + footway=access_aisle
+    # Bronze: + access_aisle:markings (any value)
+    # Silver: + surface
+    # Gold: + lit + width + incline + tactile_paving
+    # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present)
+    # ============================================================
+    - type: line
+      filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "access_aisle"]]
+      line-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "access_aisle"],
+            ["has", "access_aisle:markings"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"],
+            ["has", "incline:across"],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ]
+          ],
+          "#4fc3f7",
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "access_aisle"],
+            ["has", "access_aisle:markings"],
+            ["has", "surface"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "incline"],
+            ["has", "tactile_paving"]
+          ],
+          "#d4af37",
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "access_aisle"],
+            ["has", "access_aisle:markings"],
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+          # Bronze
+          ["all",
+            ["==", ["get", "highway"], "footway"],
+            ["==", ["get", "footway"], "access_aisle"],
+            ["has", "access_aisle:markings"]
+          ],
+          "#cd7f32",
+          "#cd7f32"
+        ]
+      line-width:
+        stops: [[13, 2], [17, 6]]
+      line-dasharray: [0.6, 1.3]
+
+    # ============================================================
+    # ROADWAY sidewalk presence overlay (not tiered)
+    # Green = separate, Orange = no, Gray = other/unspecified
+    # ============================================================
+    - type: line
+      filter:
+        ["all",
+          ["==", ["geometry-type"], "LineString"],
+          ["has", "highway"],
+          ["!=", ["get", "highway"], "footway"],
+          ["any",
+            ["has", "sidewalk:left"],
+            ["has", "sidewalk:right"],
+            ["has", "sidewalk:both"],
+            ["has", "sidewalk"]
+          ]
+        ]
+      line-color:
+        ["case",
+          ["any",
+            ["==", ["get", "sidewalk:left"], "separate"],
+            ["==", ["get", "sidewalk:right"], "separate"],
+            ["==", ["get", "sidewalk:both"], "separate"],
+            ["==", ["get", "sidewalk"], "separate"]
+          ],
+          "#2e8b57",
+          ["any",
+            ["==", ["get", "sidewalk:left"], "no"],
+            ["==", ["get", "sidewalk:right"], "no"],
+            ["==", ["get", "sidewalk:both"], "no"],
+            ["==", ["get", "sidewalk"], "no"]
+          ],
+          "#d95f02",
+          "#555555"
+        ]
+      line-width:
+        stops: [[12, 1.2], [16, 3]]
+      line-dasharray: [3, 2]
+      line-opacity: 0.8
+
+    # ============================================================
+    # CROSSING NODES (highway=crossing)
+    # Same crossing tier logic as crossing ways (adapted to Point geometry).
+    # ============================================================
+    - type: circle
+      filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "highway"], "crossing"]]
+      circle-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["!", ["==", ["get", "crossing:signals"], "yes"]],
+              ["any",
+                ["==", ["get", "crossing:signals"], "no"],
+                ["==", ["get", "crossing:signals"], "shared"],
+                ["==", ["get", "crossing:signals"], "dedicated"]
+              ]
+            ],
+
+            ["has", "surface"],
+            ["has", "width"],
+            ["has", "button_operated"],
+            ["has", "traffic_signals:arrow"],
+            ["has", "traffic_signals:vibration"],
+            ["has", "traffic_signals:minimap"],
+            ["has", "crossing:flags"]
+          ],
+          "#4fc3f7",
+
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+
+            ["has", "surface"],
+            ["has", "width"],
+            ["has", "button_operated"],
+            ["has", "traffic_signals:arrow"],
+            ["has", "traffic_signals:vibration"]
+          ],
+          "#d4af37",
+
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["!", ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+
+          # Bronze
+          ["all",
+            ["==", ["get", "highway"], "crossing"],
+
+            ["all",
+              ["has", "crossing:markings"],
+              ["any",
+                ["==", ["get", "crossing:markings"], "yes"],
+                ["==", ["get", "crossing:markings"], "no"]
+              ]
+            ],
+
+            ["all",
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ]
+          ],
+          "#cd7f32",
+
+          "#cd7f32"
+        ]
+      circle-radius:
+        stops: [[13, 2.5], [17, 6]]
+      circle-stroke-color: white
+      circle-stroke-width: 1.2
+
+    # ============================================================
+    # CURBS (nodes): barrier=kerb
+    # Diamond should NOT require tactile_paving:colour if tactile_paving=no
+    # ============================================================
+    - type: circle
+      filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "barrier"], "kerb"]]
+      circle-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "barrier"], "kerb"],
+            ["has", "kerb"],
+            ["has", "tactile_paving"],
+            ["has", "kerb:height"],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ]
+          ],
+          "#4fc3f7",
+          # Gold
+          ["all",
+            ["==", ["get", "barrier"], "kerb"],
+            ["has", "kerb"],
+            ["has", "tactile_paving"],
+            ["has", "kerb:height"]
+          ],
+          "#d4af37",
+          # Silver
+          ["all",
+            ["==", ["get", "barrier"], "kerb"],
+            ["has", "kerb"],
+            ["has", "tactile_paving"]
+          ],
+          "#c0c0c0",
+          # Bronze
+          "#cd7f32"
+        ]
+      circle-radius:
+        stops: [[13, 2], [17, 5]]
+      circle-stroke-color: "#222"
+      circle-stroke-width: 1
+
+---
+[bbox:{{bbox}}];
+(
+  way[highway=footway][footway~"^(sidewalk|crossing|traffic_island|access_aisle)$"];
+  way["area:highway"=footway];
+  relation["area:highway"=footway];
+
+  node[highway=crossing];
+  node[barrier=kerb];
+
+  way[highway][~"^sidewalk(:left|:right|:both)?$"~"^(no|separate)$"];
+);
+out geom;
