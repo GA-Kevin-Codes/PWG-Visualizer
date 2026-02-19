@@ -1,6 +1,6 @@
 ---
 title: PWG Pedestrian Infrastructure (Tier View)
-description: Visualize PWG guide features inside {{bbox}}. Color = PWG tier from mapped tags; pattern = feature class.
+description: Visualize PWG guide features inside {{bbox}}. Color = PWG tier from mapped tags; pattern = feature class. Node icons = PWG tier symbols.
 popupOnHover: true
 
 style:
@@ -370,8 +370,7 @@ style:
       line-opacity: 0.8
 
     # ============================================================
-    # CROSSING NODES (highway=crossing)
-    # Same crossing tier logic as crossing ways (adapted to Point geometry).
+    # CROSSING NODES (highway=crossing) - base circle (kept as halo)
     # ============================================================
     - type: circle
       filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "highway"], "crossing"]]
@@ -380,7 +379,6 @@ style:
           # Diamond
           ["all",
             ["==", ["get", "highway"], "crossing"],
-
             ["all",
               ["has", "crossing:markings"],
               ["!", ["any",
@@ -388,7 +386,6 @@ style:
                 ["==", ["get", "crossing:markings"], "no"]
               ]]
             ],
-
             ["all",
               ["has", "crossing:signals"],
               ["!", ["==", ["get", "crossing:signals"], "yes"]],
@@ -398,7 +395,6 @@ style:
                 ["==", ["get", "crossing:signals"], "dedicated"]
               ]
             ],
-
             ["has", "surface"],
             ["has", "width"],
             ["has", "button_operated"],
@@ -408,11 +404,9 @@ style:
             ["has", "crossing:flags"]
           ],
           "#4fc3f7",
-
           # Gold
           ["all",
             ["==", ["get", "highway"], "crossing"],
-
             ["all",
               ["has", "crossing:markings"],
               ["!", ["any",
@@ -420,7 +414,6 @@ style:
                 ["==", ["get", "crossing:markings"], "no"]
               ]]
             ],
-
             ["all",
               ["has", "crossing:signals"],
               ["any",
@@ -428,7 +421,6 @@ style:
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
-
             ["has", "surface"],
             ["has", "width"],
             ["has", "button_operated"],
@@ -436,11 +428,9 @@ style:
             ["has", "traffic_signals:vibration"]
           ],
           "#d4af37",
-
           # Silver
           ["all",
             ["==", ["get", "highway"], "crossing"],
-
             ["all",
               ["has", "crossing:markings"],
               ["!", ["any",
@@ -448,7 +438,6 @@ style:
                 ["==", ["get", "crossing:markings"], "no"]
               ]]
             ],
-
             ["all",
               ["has", "crossing:signals"],
               ["any",
@@ -456,15 +445,12 @@ style:
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
-
             ["has", "surface"]
           ],
           "#c0c0c0",
-
           # Bronze
           ["all",
             ["==", ["get", "highway"], "crossing"],
-
             ["all",
               ["has", "crossing:markings"],
               ["any",
@@ -472,7 +458,6 @@ style:
                 ["==", ["get", "crossing:markings"], "no"]
               ]
             ],
-
             ["all",
               ["has", "crossing:signals"],
               ["any",
@@ -482,17 +467,104 @@ style:
             ]
           ],
           "#cd7f32",
-
           "#cd7f32"
         ]
       circle-radius:
-        stops: [[13, 2.5], [17, 6]]
+        stops: [[13, 3.2], [17, 7.5]]
       circle-stroke-color: white
-      circle-stroke-width: 1.2
+      circle-stroke-width: 1.6
+      circle-opacity: 0.75
 
     # ============================================================
-    # CURBS (nodes): barrier=kerb
-    # Diamond should NOT require tactile_paving:colour if tactile_paving=no
+    # CROSSING NODES (highway=crossing) - PWG tier icon overlay
+    # ============================================================
+    - type: symbol
+      filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "highway"], "crossing"]]
+      layout:
+        icon-padding: 0
+        icon-size: 0.075
+        icon-allow-overlap: true
+        icon-ignore-placement: true
+        icon-image:
+          ["case",
+            # Diamond
+            ["all",
+              ["all",
+                ["has","crossing:markings"],
+                ["!", ["any",
+                  ["==",["get","crossing:markings"],"yes"],
+                  ["==",["get","crossing:markings"],"no"]
+                ]]
+              ],
+              ["all",
+                ["has","crossing:signals"],
+                ["!", ["==",["get","crossing:signals"],"yes"]],
+                ["any",
+                  ["==",["get","crossing:signals"],"no"],
+                  ["==",["get","crossing:signals"],"shared"],
+                  ["==",["get","crossing:signals"],"dedicated"]
+                ]
+              ],
+              ["has","surface"],
+              ["has","width"],
+              ["has","button_operated"],
+              ["has","traffic_signals:arrow"],
+              ["has","traffic_signals:vibration"],
+              ["has","traffic_signals:minimap"],
+              ["has","crossing:flags"]
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/9/92/PWG_-_Diamond.svg",
+
+            # Gold
+            ["all",
+              ["all",
+                ["has","crossing:markings"],
+                ["!", ["any",
+                  ["==",["get","crossing:markings"],"yes"],
+                  ["==",["get","crossing:markings"],"no"]
+                ]]
+              ],
+              ["all",
+                ["has","crossing:signals"],
+                ["any",
+                  ["==",["get","crossing:signals"],"yes"],
+                  ["==",["get","crossing:signals"],"no"]
+                ]
+              ],
+              ["has","surface"],
+              ["has","width"],
+              ["has","button_operated"],
+              ["has","traffic_signals:arrow"],
+              ["has","traffic_signals:vibration"]
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/2/27/PWG_-_Gold.svg",
+
+            # Silver
+            ["all",
+              ["all",
+                ["has","crossing:markings"],
+                ["!", ["any",
+                  ["==",["get","crossing:markings"],"yes"],
+                  ["==",["get","crossing:markings"],"no"]
+                ]]
+              ],
+              ["all",
+                ["has","crossing:signals"],
+                ["any",
+                  ["==",["get","crossing:signals"],"yes"],
+                  ["==",["get","crossing:signals"],"no"]
+                ]
+              ],
+              ["has","surface"]
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
+
+            # Bronze (default)
+            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg"
+          ]
+
+    # ============================================================
+    # CURBS (nodes): barrier=kerb - base circle (kept as halo)
     # ============================================================
     - type: circle
       filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "barrier"], "kerb"]]
@@ -529,9 +601,47 @@ style:
           "#cd7f32"
         ]
       circle-radius:
-        stops: [[13, 2], [17, 5]]
+        stops: [[13, 2.7], [17, 6.5]]
       circle-stroke-color: "#222"
-      circle-stroke-width: 1
+      circle-stroke-width: 1.4
+      circle-opacity: 0.75
+
+    # ============================================================
+    # CURBS (nodes): barrier=kerb - PWG tier icon overlay
+    # ============================================================
+    - type: symbol
+      filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "barrier"], "kerb"]]
+      layout:
+        icon-padding: 0
+        icon-size: 0.075
+        icon-allow-overlap: true
+        icon-ignore-placement: true
+        icon-image:
+          ["case",
+            # Diamond
+            ["all",
+              ["==", ["get", "barrier"], "kerb"],
+              ["has","kerb"],
+              ["has","tactile_paving"],
+              ["has","kerb:height"],
+              ["any",
+                ["==",["get","tactile_paving"],"no"],
+                ["has","tactile_paving:colour"]
+              ]
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/9/92/PWG_-_Diamond.svg",
+
+            # Gold
+            ["all", ["has","kerb"], ["has","tactile_paving"], ["has","kerb:height"]],
+            "https://upload.wikimedia.org/wikipedia/commons/2/27/PWG_-_Gold.svg",
+
+            # Silver
+            ["all", ["has","kerb"], ["has","tactile_paving"]],
+            "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
+
+            # Bronze
+            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg"
+          ]
 
 ---
 [bbox:{{bbox}}];
