@@ -195,7 +195,7 @@ style:
           ],
           "#cd7f32",
 
-          "#444444" # default to a dark gray for crossings missing all of the above
+          "#000000" # default to black for sub-bronze crossings
         ]
       line-width:
         stops: [[13, 2], [17, 7]]
