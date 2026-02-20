@@ -439,7 +439,7 @@ style:
               ["has","crossing:signals"],
           ],
         "#cd7f32",
-        "#444444", # default to a dark gray
+        "#ffffff", # default to a dark gray
       ]
       circle-radius:
         stops: [[13, 3.2], [17, 7.5]]
@@ -539,7 +539,7 @@ style:
             "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg",
 
             # Fallback to just a blank ped icon where missing any of the above details
-            "https://upload.wikimedia.org/wikipedia/commons/5/5b/Pedestrian_walking_by_User-MrALCA95.png",
+            "https://upload.wikimedia.org/wikipedia/commons/0/01/PWG_-_Hollow.svg",
             
           ]
 
