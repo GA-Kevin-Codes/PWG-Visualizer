@@ -187,30 +187,15 @@ style:
           ],
           "#c0c0c0",
 
+
           # Bronze
           ["all",
-            ["==", ["get", "highway"], "footway"],
-            ["==", ["get", "footway"], "crossing"],
-
-            ["all",
-              ["has", "crossing:markings"],
-              ["any",
-                ["==", ["get", "crossing:markings"], "yes"],
-                ["==", ["get", "crossing:markings"], "no"]
-              ]
-            ],
-
-            ["all",
-              ["has", "crossing:signals"],
-              ["any",
-                ["==", ["get", "crossing:signals"], "yes"],
-                ["==", ["get", "crossing:signals"], "no"]
-              ]
-            ]
+            ["has","crossing:markings"],
+            ["has","crossing:signals"],
           ],
           "#cd7f32",
 
-          "#cd7f32"
+          "#444444" # default to a dark gray for crossings missing all of the above
         ]
       line-width:
         stops: [[13, 2], [17, 7]]
@@ -450,25 +435,12 @@ style:
           "#c0c0c0",
           # Bronze
           ["all",
-            ["==", ["get", "highway"], "crossing"],
-            ["all",
-              ["has", "crossing:markings"],
-              ["any",
-                ["==", ["get", "crossing:markings"], "yes"],
-                ["==", ["get", "crossing:markings"], "no"]
-              ]
-            ],
-            ["all",
-              ["has", "crossing:signals"],
-              ["any",
-                ["==", ["get", "crossing:signals"], "yes"],
-                ["==", ["get", "crossing:signals"], "no"]
-              ]
-            ]
+              ["has","crossing:markings"],
+              ["has","crossing:signals"],
           ],
-          "#cd7f32",
-          "#cd7f32"
-        ]
+        "#cd7f32",
+        "#444444", # default to a dark gray
+      ]
       circle-radius:
         stops: [[13, 3.2], [17, 7.5]]
       circle-stroke-color: white
@@ -559,8 +531,16 @@ style:
             ],
             "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
 
-            # Bronze (default)
-            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg"
+            # Bronze
+            ["all",
+                ["has","crossing:markings"],
+                ["has","crossing:signals"],
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg",
+
+            # Fallback to just a blank ped icon where missing any of the above details
+            "https://upload.wikimedia.org/wikipedia/commons/5/5b/Pedestrian_walking_by_User-MrALCA95.png",
+            
           ]
 
     # ============================================================
