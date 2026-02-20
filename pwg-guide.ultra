@@ -439,7 +439,7 @@ style:
               ["has","crossing:signals"],
           ],
         "#cd7f32",
-        "#ffffff", # default to a dark gray
+        "#ffffff", # default to a white because it'll end up being a background for the hollow icon. The crossing way itself would be gray
       ]
       circle-radius:
         stops: [[13, 3.2], [17, 7.5]]
