@@ -95,6 +95,21 @@ style:
     # Diamond: Gold + traffic_signals:minimap + crossing:flags + signals (no/shared/dedicated) AND NOT yes
     # ============================================================
     - type: line
+      filter: ["all",
+                ["==", ["geometry-type"], "LineString"],
+                ["==", ["get", "highway"], "footway"],
+                ["==", ["get", "footway"], "crossing"],
+                ["any",
+                    ["!", ["has", "crossing:markings"]],
+                    ["!", ["has", "crossing:signals"]]
+                ]
+              ]
+      line-color: "#ffffff"
+      line-width:
+        stops: [[13, 2], [17, 7]]
+
+
+    - type: line
       filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "crossing"]]
       line-color:
         ["case",
@@ -539,7 +554,7 @@ style:
             "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg",
 
             # Fallback to just a blank ped icon where missing any of the above details
-            "https://upload.wikimedia.org/wikipedia/commons/0/01/PWG_-_Hollow.svg",
+            "https://raw.githubusercontent.com/nickrsan/PWG-Visualizer/refs/heads/patch-1/icons/PWG_-_Invert.svg",
             
           ]
 
