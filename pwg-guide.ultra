@@ -95,6 +95,21 @@ style:
     # Diamond: Gold + traffic_signals:minimap + crossing:flags + signals (no/shared/dedicated) AND NOT yes
     # ============================================================
     - type: line
+      filter: ["all",
+                ["==", ["geometry-type"], "LineString"],
+                ["==", ["get", "highway"], "footway"],
+                ["==", ["get", "footway"], "crossing"],
+                ["any",
+                    ["!", ["has", "crossing:markings"]],
+                    ["!", ["has", "crossing:signals"]]
+                ]
+              ]
+      line-color: "#ffffff"
+      line-width:
+        stops: [[13, 2], [17, 7]]
+
+
+    - type: line
       filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "footway"], ["==", ["get", "footway"], "crossing"]]
       line-color:
         ["case",
@@ -187,30 +202,15 @@ style:
           ],
           "#c0c0c0",
 
+
           # Bronze
           ["all",
-            ["==", ["get", "highway"], "footway"],
-            ["==", ["get", "footway"], "crossing"],
-
-            ["all",
-              ["has", "crossing:markings"],
-              ["any",
-                ["==", ["get", "crossing:markings"], "yes"],
-                ["==", ["get", "crossing:markings"], "no"]
-              ]
-            ],
-
-            ["all",
-              ["has", "crossing:signals"],
-              ["any",
-                ["==", ["get", "crossing:signals"], "yes"],
-                ["==", ["get", "crossing:signals"], "no"]
-              ]
-            ]
+            ["has","crossing:markings"],
+            ["has","crossing:signals"],
           ],
           "#cd7f32",
 
-          "#cd7f32"
+          "#000000" # default to black for sub-bronze crossings
         ]
       line-width:
         stops: [[13, 2], [17, 7]]
@@ -450,25 +450,12 @@ style:
           "#c0c0c0",
           # Bronze
           ["all",
-            ["==", ["get", "highway"], "crossing"],
-            ["all",
-              ["has", "crossing:markings"],
-              ["any",
-                ["==", ["get", "crossing:markings"], "yes"],
-                ["==", ["get", "crossing:markings"], "no"]
-              ]
-            ],
-            ["all",
-              ["has", "crossing:signals"],
-              ["any",
-                ["==", ["get", "crossing:signals"], "yes"],
-                ["==", ["get", "crossing:signals"], "no"]
-              ]
-            ]
+              ["has","crossing:markings"],
+              ["has","crossing:signals"],
           ],
-          "#cd7f32",
-          "#cd7f32"
-        ]
+        "#cd7f32",
+        "#ffffff", # default to a white because it'll end up being a background for the hollow icon. The crossing way itself would be gray
+      ]
       circle-radius:
         stops: [[13, 3.2], [17, 7.5]]
       circle-stroke-color: white
@@ -559,8 +546,16 @@ style:
             ],
             "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
 
-            # Bronze (default)
-            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg"
+            # Bronze
+            ["all",
+                ["has","crossing:markings"],
+                ["has","crossing:signals"],
+            ],
+            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg",
+
+            # Fallback to just a blank ped icon where missing any of the above details
+            "https://raw.githubusercontent.com/nickrsan/PWG-Visualizer/refs/heads/patch-1/icons/PWG_-_Invert.svg",
+            
           ]
 
     # ============================================================
