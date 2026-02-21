@@ -554,7 +554,7 @@ style:
             "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg",
 
             # Fallback to just a blank ped icon where missing any of the above details
-            "https://raw.githubusercontent.com/nickrsan/PWG-Visualizer/refs/heads/patch-1/icons/PWG_-_Invert.svg",
+            "https://raw.githubusercontent.com/GA-Kevin-Codes/PWG-Visualizer/refs/heads/main/icons/PWG_-_Invert.svg",
             
           ]
 
