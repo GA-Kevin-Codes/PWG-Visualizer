@@ -4,7 +4,7 @@ description: Visualize PWG guide features inside {{bbox}}. Color = PWG tier from
 popupOnHover: true
 
 style:
-  extends: https://styles.trailsta.sh/openmaptiles-osm.json
+  extends: https://api.protomaps.com/styles/v5/dark/en.json?key=f8eceeaad6896c92
 
   layers:
     # ============================================================
