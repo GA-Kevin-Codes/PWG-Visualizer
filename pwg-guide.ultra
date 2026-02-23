@@ -460,16 +460,16 @@ style:
         stops: [[13, 3.2], [17, 7.5]]
       circle-stroke-color: white
       circle-stroke-width: 1.6
-      circle-opacity: 0.75
 
     # ============================================================
     # CROSSING NODES (highway=crossing) - PWG tier icon overlay
     # ============================================================
     - type: symbol
+      minzoom: 17
       filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "highway"], "crossing"]]
       layout:
         icon-padding: 0
-        icon-size: 0.075
+        icon-size: 0.1
         icon-allow-overlap: true
         icon-ignore-placement: true
         icon-image:
@@ -593,22 +593,22 @@ style:
           ],
           "#c0c0c0",
           # Bronze
-          "#cd7f32"
+          "#e68236"
         ]
       circle-radius:
-        stops: [[13, 2.7], [17, 6.5]]
+        stops: [[13, 2.7], [17, 12]]
       circle-stroke-color: "#222"
       circle-stroke-width: 1.4
-      circle-opacity: 0.75
 
     # ============================================================
-    # CURBS (nodes): barrier=kerb - PWG tier icon overlay
+    # CURBS (nodes): barrier=kerb - Pinhead tier icon overlay
     # ============================================================
     - type: symbol
+      minzoom: 17
       filter: ["all", ["==", ["geometry-type"], "Point"], ["==", ["get", "barrier"], "kerb"]]
       layout:
         icon-padding: 0
-        icon-size: 0.075
+        icon-size: 0.05
         icon-allow-overlap: true
         icon-ignore-placement: true
         icon-image:
@@ -624,18 +624,18 @@ style:
                 ["has","tactile_paving:colour"]
               ]
             ],
-            "https://upload.wikimedia.org/wikipedia/commons/9/92/PWG_-_Diamond.svg",
+            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
 
             # Gold
             ["all", ["has","kerb"], ["has","tactile_paving"], ["has","kerb:height"]],
-            "https://upload.wikimedia.org/wikipedia/commons/2/27/PWG_-_Gold.svg",
+            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
 
             # Silver
             ["all", ["has","kerb"], ["has","tactile_paving"]],
-            "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
+            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
 
             # Bronze
-            "https://upload.wikimedia.org/wikipedia/commons/b/b7/PWG_-_Bronze.svg"
+            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg"
           ]
 
 ---
