@@ -612,31 +612,13 @@ style:
         icon-allow-overlap: true
         icon-ignore-placement: true
         icon-image:
-          ["case",
-            # Diamond
-            ["all",
-              ["==", ["get", "barrier"], "kerb"],
-              ["has","kerb"],
-              ["has","tactile_paving"],
-              ["has","kerb:height"],
-              ["any",
-                ["==",["get","tactile_paving"],"no"],
-                ["has","tactile_paving:colour"]
-              ]
-            ],
-            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
-
-            # Gold
-            ["all", ["has","kerb"], ["has","tactile_paving"], ["has","kerb:height"]],
-            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
-
-            # Silver
-            ["all", ["has","kerb"], ["has","tactile_paving"]],
-            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
-
-            # Bronze
-            "https://pinhead.ink/v3/kerb_raised_under_shoe.svg"
-          ]
+            ["case",
+                ["==", ["get", "kerb"], "flush"], "https://pinhead.ink/v3/kerb_flush_under_shoe.svg",
+                ["==", ["get", "kerb"], "lowered"], "https://pinhead.ink/v3/kerb_lowered_under_shoe.svg",
+                ["==", ["get", "kerb"], "raised"], "https://pinhead.ink/v3/kerb_raised_under_shoe.svg",
+                ["==", ["get", "kerb"], "rolled"], "https://pinhead.ink/v3/kerb_rolled_under_shoe.svg",
+                "https://pinhead.ink/v3/kerb_raised_under_shoe.svg"
+            ]
 
 ---
 [bbox:{{bbox}}];
