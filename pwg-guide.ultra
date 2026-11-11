@@ -139,7 +139,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "separate"],
                 ["==", ["get", "crossing:island"], "no"]
               ]
             ],
@@ -195,7 +195,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "separate"],
                 ["==", ["get", "crossing:island"], "no"]
               ]
             ],
@@ -245,7 +245,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "separate"],
                 ["==", ["get", "crossing:island"], "no"]
               ]
             ],
@@ -384,7 +384,7 @@ style:
     # Stair Cases (ways): highway=steps
     # Bronze: way tagged as highway=steps
     # Silver: + surface + incline + ramp (yes or no) + handrail
-    # Gold: + lit + width + incline + ramp=seperate (if silver tier is yes) + tactile_paving
+    # Gold: + lit + width + incline + ramp=separate (if silver tier is yes) + tactile_paving
     # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present) + handrail:(left|right|both)=*
     # ============================================================
     - type: line
@@ -546,7 +546,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "separate"],
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
@@ -585,7 +585,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "separate"],
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
@@ -622,7 +622,7 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "separate"],
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
@@ -676,8 +676,8 @@ style:
               ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
-                ["==", ["get", "crossing:signals"], "no"]
+                ["==", ["get", "crossing:island"], "separate"],
+                ["==", ["get", "crossing:island"], "no"]
               ]
             ],
               ["has", "crossing:signed"],
@@ -708,8 +708,8 @@ style:
               ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
-                ["==", ["get", "crossing:signals"], "no"]
+                ["==", ["get", "crossing:island"], "separate"],
+                ["==", ["get", "crossing:island"], "no"]
               ]
             ],
               ["has", "crossing:signed"],
@@ -738,8 +738,8 @@ style:
             ["all",
               ["has", "crossing:island"],
               ["any",
-                ["==", ["get", "crossing:signals"], "seperate"],
-                ["==", ["get", "crossing:signals"], "no"]
+                ["==", ["get", "crossing:island"], "separate"],
+                ["==", ["get", "crossing:island"], "no"]
               ]
             ],
               ["has","surface"]
