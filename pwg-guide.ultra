@@ -398,7 +398,7 @@ style:
               ["has", "ramp"],
               ["any",
                 ["==", ["get", "ramp"], "yes"],
-                ["==", ["get", "ramp"], "seperate"],
+                ["==", ["get", "ramp"], "separate"],
                 ["==", ["get", "ramp"], "no"]
               ]
             ],
@@ -431,7 +431,7 @@ style:
               ["has", "ramp"],
               ["any",
                 ["==", ["get", "ramp"], "yes"],
-                ["==", ["get", "ramp"], "seperate"],
+                ["==", ["get", "ramp"], "separate"],
                 ["==", ["get", "ramp"], "no"]
               ]
             ],
