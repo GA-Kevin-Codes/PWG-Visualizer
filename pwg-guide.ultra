@@ -553,8 +553,19 @@ style:
             ["all",
               ["has", "crossing_ref"],
               ["any",
-                ["==", ["get", "crossing:signals"], "hawk"],
-                ["==", ["get", "crossing:signals"], "rrfb"]
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["!", ["==", ["get", "flashing_lights"], "yes"]],
+              ["any",
+                ["==", ["get", "crossing:signals"], "no"],
+                ["==", ["get", "crossing:signals"], "always"],
+                ["==", ["get", "crossing:signals"], "button"],
+                ["==", ["get", "crossing:signals"], "sensor"],
+                ["==", ["get", "crossing:signals"], "button;sensor"]
               ]
             ],
             ["has", "crossing:signed"],
@@ -592,8 +603,15 @@ style:
             ["all",
               ["has", "crossing_ref"],
               ["any",
-                ["==", ["get", "crossing:signals"], "hawk"],
-                ["==", ["get", "crossing:signals"], "rrfb"]
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["any",
+                ["==", ["get", "flashing_lights"], "yes"],
+                ["==", ["get", "flashing_lights"], "no"]
               ]
             ],
             ["has", "crossing:signed"],
@@ -680,6 +698,24 @@ style:
                 ["==", ["get", "crossing:island"], "no"]
               ]
             ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["!", ["==", ["get", "flashing_lights"], "yes"]],
+              ["any",
+                ["==", ["get", "crossing:signals"], "no"],
+                ["==", ["get", "crossing:signals"], "always"],
+                ["==", ["get", "crossing:signals"], "button"],
+                ["==", ["get", "crossing:signals"], "sensor"],
+                ["==", ["get", "crossing:signals"], "button;sensor"]
+              ]
+            ],
               ["has", "crossing:signed"],
               ["has","button_operated"],
               ["has","traffic_signals:arrow"],
@@ -710,6 +746,20 @@ style:
               ["any",
                 ["==", ["get", "crossing:island"], "separate"],
                 ["==", ["get", "crossing:island"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["any",
+                ["==", ["get", "flashing_lights"], "yes"],
+                ["==", ["get", "flashing_lights"], "no"]
               ]
             ],
               ["has", "crossing:signed"],
