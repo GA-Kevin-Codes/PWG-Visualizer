@@ -136,7 +136,32 @@ style:
                 ["==", ["get", "crossing:signals"], "dedicated"]
               ]
             ],
-
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["!", ["==", ["get", "flashing_lights"], "yes"]],
+              ["any",
+                ["==", ["get", "crossing:signals"], "no"],
+                ["==", ["get", "crossing:signals"], "always"],
+                ["==", ["get", "crossing:signals"], "button"],
+                ["==", ["get", "crossing:signals"], "sensor"],
+                ["==", ["get", "crossing:signals"], "button;sensor"]
+              ]
+            ],
+            ["has", "crossing:signed"],
             ["has", "surface"],
             ["has", "width"],
             ["has", "button_operated"],
@@ -167,7 +192,28 @@ style:
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
-
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing_ref"], "hawk"],
+                ["==", ["get", "crossing_ref"], "rrfb"]
+              ]
+            ],
+            ["all",
+              ["has", "flashing_lights"],
+              ["any",
+                ["==", ["get", "flashing_lights"], "yes"],
+                ["==", ["get", "flashing_lights"], "no"]
+              ]
+            ],
+            ["has", "crossing:signed"],
             ["has", "surface"],
             ["has", "width"],
             ["has", "button_operated"],
@@ -196,6 +242,13 @@ style:
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:island"], "seperate"],
+                ["==", ["get", "crossing:island"], "no"]
+              ]
+            ],
 
             ["has", "surface"]
           ],
@@ -217,8 +270,7 @@ style:
 
     # ============================================================
     # ISLANDS (ways): highway=footway + footway=traffic_island
-    # Bronze: geometry
-    # Silver: + surface
+    # Silver: geometry + surface
     # Gold: + lit + width + incline + tactile_paving
     # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present)
     # ============================================================
@@ -260,8 +312,8 @@ style:
             ["has", "surface"]
           ],
           "#c0c0c0",
-          # Bronze
-          "#cd7f32"
+          # Silver geometry
+          "#c0c0c0"
         ]
       line-width:
         stops: [[13, 2], [17, 6]]
@@ -329,6 +381,103 @@ style:
       line-dasharray: [0.6, 1.3]
 
     # ============================================================
+    # Stair Cases (ways): highway=steps
+    # Bronze: way tagged as highway=steps
+    # Silver: + surface + incline + ramp (yes or no) + handrail
+    # Gold: + lit + width + incline + ramp=seperate (if silver tier is yes) + tactile_paving
+    # Diamond: + incline:across + (tactile_paving=no OR tactile_paving:colour present) + handrail:(left|right|both)=*
+    # ============================================================
+    - type: line
+      filter: ["all", ["==", ["geometry-type"], "LineString"], ["==", ["get", "highway"], "steps"]]
+      line-color:
+        ["case",
+          # Diamond
+          ["all",
+            ["==", ["get", "highway"], "steps"],
+            ["all",
+              ["has", "ramp"],
+              ["any",
+                ["==", ["get", "ramp"], "yes"],
+                ["==", ["get", "ramp"], "seperate"],
+                ["==", ["get", "ramp"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "incline"],
+              ["any",
+                ["==", ["get", "incline"], "up"],
+                ["==", ["get", "incline"], "down"]
+              ]
+            ],
+            ["any",
+              ["==", ["get", "tactile_paving"], "no"],
+              ["has", "tactile_paving:colour"]
+            ],
+            ["has", "handrail"],
+            ["has", "handrail:right"],
+            ["has", "handrail:left"],
+            ["has", "handrail:both"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "tactile_paving"],
+            ["has", "step_count"],
+            ["has", "surface"]
+          ],
+          "#4fc3f7",
+          # Gold
+          ["all",
+            ["==", ["get", "highway"], "steps"],
+            ["all",
+              ["has", "ramp"],
+              ["any",
+                ["==", ["get", "ramp"], "yes"],
+                ["==", ["get", "ramp"], "seperate"],
+                ["==", ["get", "ramp"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "incline"],
+              ["any",
+                ["==", ["get", "incline"], "up"],
+                ["==", ["get", "incline"], "down"]
+              ]
+            ],
+            ["has", "handrail"],
+            ["has", "lit"],
+            ["has", "width"],
+            ["has", "tactile_paving"],
+            ["has", "step_count"],
+            ["has", "surface"]
+          ],
+          "#d4af37",
+          # Silver
+          ["all",
+            ["==", ["get", "highway"], "steps"],
+            ["all",
+              ["has", "ramp"],
+              ["any",
+                ["==", ["get", "ramp"], "yes"],
+                ["==", ["get", "ramp"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "incline"],
+              ["any",
+                ["==", ["get", "incline"], "up"],
+                ["==", ["get", "incline"], "down"]
+              ]
+            ],
+            ["has", "handrail"],
+            ["has", "surface"]
+          ],
+          "#c0c0c0",
+          # Bronze
+          "#cd7f32"
+        ]
+      line-width:
+        stops: [[13, 2], [17, 6]]
+    
+    # ============================================================
     # ROADWAY sidewalk presence overlay (not tiered)
     # Green = separate, Orange = no, Gray = other/unspecified
     # ============================================================
@@ -394,6 +543,21 @@ style:
                 ["==", ["get", "crossing:signals"], "dedicated"]
               ]
             ],
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "hawk"],
+                ["==", ["get", "crossing:signals"], "rrfb"]
+              ]
+            ],
+            ["has", "crossing:signed"],
             ["has", "button_operated"],
             ["has", "traffic_signals:arrow"],
             ["has", "traffic_signals:vibration"],
@@ -418,6 +582,21 @@ style:
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing_ref"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "hawk"],
+                ["==", ["get", "crossing:signals"], "rrfb"]
+              ]
+            ],
+            ["has", "crossing:signed"],
             ["has", "button_operated"],
             ["has", "traffic_signals:arrow"],
             ["has", "traffic_signals:vibration"]
@@ -437,6 +616,13 @@ style:
               ["has", "crossing:signals"],
               ["any",
                 ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
                 ["==", ["get", "crossing:signals"], "no"]
               ]
             ],
@@ -487,6 +673,14 @@ style:
                   ["==",["get","crossing:signals"],"dedicated"]
                 ]
               ],
+              ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+              ["has", "crossing:signed"],
               ["has","button_operated"],
               ["has","traffic_signals:arrow"],
               ["has","traffic_signals:vibration"],
@@ -511,6 +705,14 @@ style:
                   ["==",["get","crossing:signals"],"no"]
                 ]
               ],
+              ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+              ["has", "crossing:signed"],
               ["has","button_operated"],
               ["has","traffic_signals:arrow"],
               ["has","traffic_signals:vibration"]
@@ -527,12 +729,19 @@ style:
                 ]]
               ],
               ["all",
-                ["has","crossing:signals"],
-                ["any",
-                  ["==",["get","crossing:signals"],"yes"],
-                  ["==",["get","crossing:signals"],"no"]
-                ]
-              ],
+              ["has", "crossing:signals"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "yes"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
+            ["all",
+              ["has", "crossing:island"],
+              ["any",
+                ["==", ["get", "crossing:signals"], "seperate"],
+                ["==", ["get", "crossing:signals"], "no"]
+              ]
+            ],
               ["has","surface"]
             ],
             "https://upload.wikimedia.org/wikipedia/commons/9/9d/PWG_-_Silver.svg",
@@ -622,5 +831,6 @@ style:
   node[barrier=kerb];
 
   way[highway][~"^sidewalk(:left|:right|:both)?$"~"^(no|separate)$"];
+  way[highway=steps];
 );
 out geom;
